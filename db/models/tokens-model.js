@@ -15,8 +15,14 @@ module.exports = function (sequelize) {
         },
         refreshToken: {
             type: Sequelize.STRING
+        },
+        createdAt:{
+            type: 'TIMESTAMP',
+            defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        },
+        updatedAt:{
+            type: 'TIMESTAMP',
+            defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
         }
-    }, {
-        timestamps: false
     })
 }
