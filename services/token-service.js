@@ -12,7 +12,7 @@ class TokenService {
         const tokenData = await TokensModel.findOne({where: {userId}})
         if (tokenData) {
             tokenData.refreshToken = refreshToken
-            return await TokensModel.save()
+            return await tokenData.save()
         }
         return await TokensModel.create({userId, refreshToken})
     }
@@ -20,7 +20,7 @@ class TokenService {
     async removeToken(refreshToken) {
         const tokenData = await TokensModel.findOne({where: {refreshToken}})
         if (tokenData) {
-            return await TokensModel.destroy({where: {id: tokenData.id}})
+            return await tokenData.destroy()
         }
         return []
     }
