@@ -1,8 +1,8 @@
-const ApiError = require('../exceptions/api-error')
+const ApiError = require('../../exceptions/api-error')
 const bcrypt = require('bcrypt')
-const UserDto = require('../dtos/user-dto')
-const tokenService = require('../services/token-service')
-const {UsersModel, TokensModel} = require('../db')
+const UserDto = require('../../dtos/user-dto')
+const tokenService = require('./token-service')
+const {UsersModel, TokensModel} = require('../../databases/auth')
 const {Op} = require('sequelize')
 
 
