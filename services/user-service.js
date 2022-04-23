@@ -2,7 +2,7 @@ const ApiError = require('../exceptions/api-error')
 const bcrypt = require('bcrypt')
 const UserDto = require('../dtos/user-dto')
 const tokenService = require('../services/token-service')
-const {UsersModel} = require('../db')
+const {UsersModel, TokensModel} = require('../db')
 const {Op} = require('sequelize')
 
 
@@ -25,14 +25,41 @@ class UserService {
         }
 
         const hashedPassword = await bcrypt.hash(password, +process.env.HASH_SALT)
+        const newUser = await UsersModel.create({username, password: hashedPassword, email})
 
-        const newUser = await UsersModel.create({username, password : hashedPassword, email});
-        newUser.save()
-        console.log(newUser)
         return await this.handleUserData(newUser)
     }
+
+    async login(username, password) {
+        const user = await UsersModel.findOne({where: {username}})
+        if (!user) {
+            throw ApiError.BadRequest(`Username ${username} is not exists`)
+        }
+        const isPass = await bcrypt.compare(password, user.password)
+        if (!isPass) {
+            throw ApiError.BadRequest('Incorrect password')
+        }
+
+        return await this.handleUserData(user)
     }
 
-    module
-.
-    exports = new UserService()
+    async logout(refreshToken) {
+        return await tokenService.removeToken(refreshToken)
+    }
+
+    async refresh(refreshToken) {
+        if (!refreshToken) {
+            throw ApiError.UnauthorizedError()
+        }
+        const userData = tokenService.validateRefreshToken(refreshToken)
+        const tokenData = await TokensModel.findOne({where: {refreshToken}})
+        if (!userData || !tokenData) {
+            throw ApiError.UnauthorizedError()
+        }
+        const user = await UsersModel.findOne({where: { id: userData.id}})
+        return  await this.handleUserData(user)
+
+    }
+}
+
+module.exports = new UserService()
