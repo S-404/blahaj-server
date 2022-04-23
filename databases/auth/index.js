@@ -1,7 +1,7 @@
 const {Sequelize} = require('sequelize')
 
 const sequelize = new Sequelize(
-    process.env.DB_DATABASE_NAME,
+    process.env.DB_AUTH_DATABASE_NAME,
     process.env.DB_USER,
     process.env.DB_USER_PASSWORD,
     {
@@ -10,11 +10,12 @@ const sequelize = new Sequelize(
     },
 )
 
+
 const TokensModel = require('./models/tokens-model')(sequelize)
 const UsersModel = require('./models/users-model')(sequelize)
 
+
 module.exports = {
-    sequelize: sequelize,
-    TokensModel: TokensModel,
-    UsersModel: UsersModel,
+    TokensModel,
+    UsersModel,
 }
