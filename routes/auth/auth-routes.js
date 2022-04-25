@@ -1,6 +1,6 @@
 const Router = require('express')
 const router = new Router()
-const userController = require("../controllers/auth/user-controller")
+const userController = require("../../controllers/auth/user-controller")
 const {body} = require('express-validator')
 
 router.post(

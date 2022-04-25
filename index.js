@@ -3,7 +3,9 @@ const cookieParser = require('cookie-parser')
 const cors = require('cors')
 require('dotenv').config()
 
-const authRouter = require('./routes/auth-routes')
+const authRouter = require('./routes/auth/auth-routes')
+const teamsRouter = require('./routes/todos/teams-routes')
+
 const apiErrorMiddleware = require("./middlewares/error-middleware")
 const authMiddleware = require("./middlewares/auth-middleware")
 
@@ -17,6 +19,8 @@ app.use(cors())
 
 app.use('/auth', authRouter)
 app.use(authMiddleware)
+
+app.use('/todos', teamsRouter)
 
 app.use(apiErrorMiddleware)
 app.listen(PORT, function () {
