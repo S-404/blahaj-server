@@ -13,6 +13,9 @@ module.exports = function (sequelize) {
             type: Sequelize.STRING(50),
             allowNull: false
         },
+        description: {
+            type: Sequelize.STRING,
+        },
     },{
         timestamps: false
     })

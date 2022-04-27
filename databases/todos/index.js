@@ -10,17 +10,13 @@ const sequelize = new Sequelize(
     },
 )
 
-const TeamsModel = require('./models/teams-model')(sequelize)
 const TaskHrefsModel = require('./models/taskHrefs-model')(sequelize)
 const TaskLogsModel = require('./models/taskLogs-model')(sequelize)
 const TasksModel = require('./models/tasks-model')(sequelize)
-const UsersAccessModel = require('./models/participants-model')(sequelize)
 
 
 module.exports = {
-    TeamsModel,
     TaskHrefsModel,
     TaskLogsModel,
     TasksModel,
-    UsersAccessModel
 }

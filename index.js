@@ -4,7 +4,7 @@ const cors = require('cors')
 require('dotenv').config()
 
 const authRouter = require('./routes/auth/auth-routes')
-const teamsRouter = require('./routes/todos/teams-routes')
+const teamsRouter = require('./routes/teams/teams-routes')
 
 const apiErrorMiddleware = require("./middlewares/error-middleware")
 const authMiddleware = require("./middlewares/auth-middleware")
@@ -19,7 +19,7 @@ app.use(cors({credentials: true, origin: process.env.CLIENT_URL}))
 app.use('/auth', authRouter)
 app.use(authMiddleware)
 
-app.use('/todos', teamsRouter)
+app.use('/teams', teamsRouter)
 
 app.use(apiErrorMiddleware)
 app.listen(PORT, function () {
