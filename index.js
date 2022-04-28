@@ -19,6 +19,7 @@ app.use(cors({credentials: true, origin: process.env.CLIENT_URL}))
 app.use('/auth', authRouter)
 app.use(authMiddleware)
 
+
 app.use('/teams', teamsRouter)
 
 app.use(apiErrorMiddleware)
