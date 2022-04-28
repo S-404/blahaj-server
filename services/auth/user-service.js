@@ -2,7 +2,7 @@ const ApiError = require('../../exceptions/api-error')
 const bcrypt = require('bcrypt')
 const UserDto = require('../../dtos/user-dto')
 const tokenService = require('./token-service')
-const {UsersModel, TokensModel} = require('../../databases/auth')
+const {UsersModel, TokensModel} = require('../../sequelize/models')
 const {Op} = require('sequelize')
 
 

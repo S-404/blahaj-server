@@ -3,7 +3,9 @@ const cookieParser = require('cookie-parser')
 const cors = require('cors')
 require('dotenv').config()
 
-const authRouter = require('./routes/auth-routes')
+const authRouter = require('./routes/auth/auth-routes')
+const teamsRouter = require('./routes/teams/teams-routes')
+
 const apiErrorMiddleware = require("./middlewares/error-middleware")
 const authMiddleware = require("./middlewares/auth-middleware")
 
@@ -12,11 +14,13 @@ const app = express()
 
 app.use(express.json())
 app.use(cookieParser())
-app.use(cors())
-// app.use(cors({credentials: true, origin: process.env.CLIENT_URL}))
+app.use(cors({credentials: true, origin: process.env.CLIENT_URL}))
 
 app.use('/auth', authRouter)
 app.use(authMiddleware)
+
+
+app.use('/teams', teamsRouter)
 
 app.use(apiErrorMiddleware)
 app.listen(PORT, function () {
