@@ -32,9 +32,18 @@ class TeamsService {
 
 
     async getAll() {
-
-        return await TeamsModel.findAll()
-
+        return await TeamsModel.findAll({
+            include: {
+                model: ParticipantsModel,
+                required: false,
+                attributes:['id','isAdmin'],
+                include:{
+                    model:UsersModel,
+                    required: false,
+                    attributes:['username'],
+                }
+            },
+        })
     }
 
     async update(id, name, description, userId) {
