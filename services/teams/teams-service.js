@@ -1,5 +1,5 @@
-const {TeamsModel, ParticipantsModel} = require('../../databases/teams')
 const ApiError = require('../../exceptions/api-error')
+const {UsersModel,TeamsModel, ParticipantsModel} = require('../../sequelize/models')
 
 class TeamsService {
 

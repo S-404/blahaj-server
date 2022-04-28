@@ -6,8 +6,8 @@ class TeamsController {
         try {
             const {name} = req.body
             const {userId} = req.user
-            const groupData = await teamsService.create(name,userId)
-            return res.json(groupData)
+            const response = await teamsService.create(name,userId)
+            return res.json(response)
         } catch
             (e) {
             next(e)
@@ -17,8 +17,8 @@ class TeamsController {
     async getOne(req, res, next) {
         try {
             const {id} = req.params
-            const groupData = await teamsService.getOne(id)
-            return res.json(groupData)
+            const response = await teamsService.getOne(id)
+            return res.json(response)
         } catch
             (e) {
             next(e)
@@ -27,20 +27,32 @@ class TeamsController {
 
     async getAll(req, res, next) {
         try {
-            const userData = await teamsService.getAll()
-            return res.json(userData)
+            const response = await teamsService.getAll()
+            return res.json(response)
         } catch
             (e) {
             next(e)
         }
     }
 
+    async getUserParticipation(req, res, next) {
+        try {
+            const {userId} = req.user
+            const response = await teamsService.getUserParticipation(userId)
+            return res.json(response)
+        } catch
+            (e) {
+            next(e)
+        }
+    }
+
+
     async update(req, res, next) {
         try {
             const {id, name} = req.body
             const {userId} = req.user
-            const userData = await teamsService.update(id, name, userId)
-            return res.json(userData)
+            const response = await teamsService.update(id, name, userId)
+            return res.json(response)
         } catch
             (e) {
             next(e)
@@ -51,8 +63,8 @@ class TeamsController {
         try {
             const {id} = req.params
             const {userId} = req.user
-            const userData = await teamsService.delete(id, userId)
-            return res.json(userData)
+            const response = await teamsService.delete(id, userId)
+            return res.json(response)
         } catch
             (e) {
             next(e)

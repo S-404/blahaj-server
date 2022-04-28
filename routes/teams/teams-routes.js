@@ -1,6 +1,6 @@
 const Router = require('express')
 const router = new Router()
-const teamsController = require("../../controllers/todos/teams-controller")
+const teamsController = require("../../controllers/teams/teams-controller")
 
 router.post('/teams', teamsController.create)
 router.get('/teams', teamsController.getAll)
