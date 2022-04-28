@@ -31,6 +31,28 @@ class TeamsService {
     }
 
 
+    async getUserParticipation(userId) {
+       return await ParticipantsModel.findAll({
+            attributes:['id','isAdmin'],
+            where:{userId},
+            include: {
+                    model: TeamsModel,
+                    required: false,
+                    attributes:['name','description'],
+                    include:{
+                        model:ParticipantsModel,
+                        required: false,
+                        attributes:['id','isAdmin'],
+                        include:{
+                            model:UsersModel,
+                            required: false,
+                            attributes:['username'],
+                        }
+                    },
+                },
+        })
+    }
+
     async getAll() {
         return await TeamsModel.findAll({
             include: {
