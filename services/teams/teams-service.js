@@ -1,25 +1,24 @@
 const ApiError = require('../../exceptions/api-error')
-const {UsersModel,TeamsModel, ParticipantsModel} = require('../../sequelize/models')
+const {UsersModel, TeamsModel, ParticipantsModel} = require('../../sequelize/models')
 
 class TeamsService {
 
     async isAdmin(userId, teamId) {
         const team = await ParticipantsModel.findOne({where: {teamId, userId}})
-        console.log(team?.isAdmin)
         return !!team.isAdmin
     }
 
-    async create(name, description, userId) {
+    async createTeam(name, description, userId) {
 
         const team = await TeamsModel.findOne({where: {name}})
 
         if (team) {
-            throw ApiError.BadRequest(`Group ${name} already exists`)
+            throw ApiError.BadRequest(`Team '${name}' already exists`)
         }
 
         const newTeam = await TeamsModel.create({name, description})
-        await ParticipantsModel.create({userId, teamId: newTeam.id, isAdmin: true})
-
+        const admin = {userId, teamId: newTeam.id, isAdmin: true}
+        await ParticipantsModel.create(admin)
         return newTeam
     }
 
@@ -31,38 +30,16 @@ class TeamsService {
     }
 
 
-    async getUserParticipation(userId) {
-       return await ParticipantsModel.findAll({
-            attributes:['id','isAdmin'],
-            where:{userId},
-            include: {
-                    model: TeamsModel,
-                    required: false,
-                    attributes:['name','description'],
-                    include:{
-                        model:ParticipantsModel,
-                        required: false,
-                        attributes:['id','isAdmin'],
-                        include:{
-                            model:UsersModel,
-                            required: false,
-                            attributes:['username'],
-                        }
-                    },
-                },
-        })
-    }
-
     async getAll() {
         return await TeamsModel.findAll({
             include: {
                 model: ParticipantsModel,
                 required: false,
-                attributes:['id','isAdmin'],
-                include:{
-                    model:UsersModel,
+                attributes: ['id', 'isAdmin'],
+                include: {
+                    model: UsersModel,
                     required: false,
-                    attributes:['username'],
+                    attributes: ['username'],
                 }
             },
         })
@@ -83,25 +60,86 @@ class TeamsService {
 
     }
 
-    async delete(id, userId) {
+    async removeTeam(id) {
+        return await TeamsModel.destroy({where: {id}})
+    }
 
-        const isUserAdmin = await this.isAdmin(userId, id)
+    async leaveTeam(teamId, userId) {
+
+        const isUserAdmin = await this.isAdmin(userId, teamId)
 
         if (!isUserAdmin) {
             throw ApiError.BadRequest(`You don't have permission to delete this team`)
         }
 
-        const team = await TeamsModel.findOne({where: {id}})
-        const participants = await ParticipantsModel.findAll({
-            where: {
-                teamId: id
-            }
-        })
-        await participants.destroy()
-        return await team.destroy()
+        const removed = await ParticipantsModel.destroy({where: {userId, teamId}})
+        const remainingMembersQty = await ParticipantsModel.count({where: {teamId}})
+        console.log(remainingMembersQty)
 
+        if (remainingMembersQty === 0) await this.removeTeam(teamId)
+
+        return removed
     }
 
+    async getUserParticipation(userId) {
+        return await ParticipantsModel.findAll({
+            attributes: ['id', 'isAdmin', 'teamId'],
+            where: {userId},
+            include: {
+                model: TeamsModel,
+                required: false,
+                attributes: ['id', 'name', 'description'],
+                include: {
+                    model: ParticipantsModel,
+                    required: false,
+                    attributes: ['id', 'isAdmin'],
+                    include: {
+                        model: UsersModel,
+                        required: false,
+                        attributes: ['username'],
+                    }
+                },
+            },
+        })
+    }
+
+    async addParticipant(id, teamId, userId) {
+
+        const isUserAdmin = await this.isAdmin(userId, teamId)
+        if (!isUserAdmin) {
+            throw ApiError.BadRequest(`You don't have permission to invite participants`)
+        }
+
+        const candidate = await ParticipantsModel.findOne({where: {id, teamId}})
+        if (candidate) {
+            throw ApiError.BadRequest(`Participant already exists`)
+        }
+
+        return await ParticipantsModel.create({userId, teamId})
+    }
+
+    async removeParticipant(id, teamId, userId) {
+
+        const isUserAdmin = await this.isAdmin(userId, teamId)
+        if (!isUserAdmin) {
+            throw ApiError.BadRequest(`You don't have permission to remove participants`)
+        }
+
+        const participant = await ParticipantsModel.findOne({where: {id, teamId}})
+        return await participant.destroy()
+    }
+
+    async updateParticipant(id, teamId, isAdmin, userId) {
+
+        const isUserAdmin = await this.isAdmin(userId, teamId)
+        if (!isUserAdmin) {
+            throw ApiError.BadRequest(`You don't have permission to update participants`)
+        }
+
+        const candidate = await ParticipantsModel.findOne({where: {id, teamId}})
+        candidate.isAdmin = isAdmin
+        return await candidate.save()
+    }
 
 }
 
