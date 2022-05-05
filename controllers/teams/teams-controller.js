@@ -2,11 +2,11 @@ const teamsService = require('../../services/teams/teams-service')
 
 class TeamsController {
 
-    async create(req, res, next) {
+    async createTeam(req, res, next) {
         try {
-            const {name} = req.body
+            const {name, description} = req.body
             const {userId} = req.user
-            const response = await teamsService.create(name,userId)
+            const response = await teamsService.createTeam(name, description, userId)
             return res.json(response)
         } catch
             (e) {
@@ -35,6 +35,54 @@ class TeamsController {
         }
     }
 
+    async update(req, res, next) {
+        try {
+            const {id, name, description} = req.body
+            const {userId} = req.user
+            const response = await teamsService.update(id, name, description, userId)
+            return res.json(response)
+        } catch
+            (e) {
+            next(e)
+        }
+    }
+
+    async leaveTeam(req, res, next) {
+        try {
+            const {teamId} = req.params
+            const {userId} = req.user
+            const response = await teamsService.leaveTeam(teamId, userId)
+            return res.json(response)
+        } catch
+            (e) {
+            next(e)
+        }
+    }
+
+    async addParticipant(req, res, next) {
+        try {
+            const {id, teamId} = req.body
+            const {userId} = req.user
+            const response = await teamsService.addParticipant(id, teamId, userId)
+            return res.json(response)
+        } catch
+            (e) {
+            next(e)
+        }
+    }
+
+    async removeParticipant(req, res, next) {
+        try {
+            const {id, teamId} = req.body
+            const {userId} = req.user
+            const response = await teamsService.removeParticipant(id, teamId, userId)
+            return res.json(response)
+        } catch
+            (e) {
+            next(e)
+        }
+    }
+
     async getUserParticipation(req, res, next) {
         try {
             const {userId} = req.user
@@ -46,24 +94,11 @@ class TeamsController {
         }
     }
 
-
-    async update(req, res, next) {
+    async updateParticipant(req, res, next) {
         try {
-            const {id, name} = req.body
+            const {id, teamId, isAdmin} = req.body
             const {userId} = req.user
-            const response = await teamsService.update(id, name, userId)
-            return res.json(response)
-        } catch
-            (e) {
-            next(e)
-        }
-    }
-
-    async delete(req, res, next) {
-        try {
-            const {id} = req.params
-            const {userId} = req.user
-            const response = await teamsService.delete(id, userId)
+            const response = await teamsService.updateParticipant(id, teamId, isAdmin, userId)
             return res.json(response)
         } catch
             (e) {
