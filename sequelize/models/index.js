@@ -27,6 +27,9 @@ ParticipantsModel.belongsTo(TeamsModel)
 UsersModel.hasOne(ParticipantsModel,{foreignKey:'UserId'})
 ParticipantsModel.belongsTo(UsersModel)
 
+TasksModel.hasMany(TaskHrefsModel,{foreignKey:'TaskId'})
+TaskHrefsModel.belongsTo(TasksModel)
+
 module.exports = {
     TokensModel,
     UsersModel,
