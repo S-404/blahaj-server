@@ -8,6 +8,11 @@ class TeamsService {
         return !!team.isAdmin
     }
 
+    async isParticipant(userId,teamId){
+        const participation = await ParticipantsModel.count({where: {teamId, userId}})
+        return participation !== 0
+    }
+
     async createTeam(name, description, userId) {
 
         const team = await TeamsModel.findOne({where: {name}})
