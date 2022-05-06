@@ -95,7 +95,7 @@ class TodosService {
                 break
         }
 
-        task.updatedBy = userId
+        task.updatedBy = taskStatus.updatedBy
 
         return await task.save()
 
