@@ -35,9 +35,11 @@ module.exports = function (sequelize) {
         },
         description: {
             type: Sequelize.STRING,
+            defaultValue: ''
         },
         note: {
             type: Sequelize.STRING,
+            defaultValue: ''
         },
         updatedBy:{
             type: Sequelize.STRING(16),
