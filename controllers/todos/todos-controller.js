@@ -90,18 +90,9 @@ class TodosController {
 
     async updateTaskStatus(req, res, next) {
         try {
-            const {id, startedAt, finishedAt, updatedBy} = req.body
-            const {mode} = req.params // start/finish/reset
+            const {mode,id} = req.params // mode: start/finish/reset
             const {userId} = req.user
-            const response = await todosService.updateTaskStatus(
-                {
-                    id,
-                    startedAt,
-                    finishedAt,
-                    updatedBy,
-                },
-                userId,
-                mode)
+            const response = await todosService.updateTaskStatus(id,userId,mode)
             return res.json(response)
         } catch (e) {
             next(e)

@@ -1,5 +1,6 @@
 const ApiError = require('../../exceptions/api-error')
 const teamsService = require('../../services/teams/teams-service')
+const Sequelize = require('sequelize')
 const {TasksModel, TaskHrefsModel, TaskLogsModel} = require('../../sequelize/models')
 
 
@@ -71,9 +72,9 @@ class TodosService {
     }
 
 
-    async updateTaskStatus(taskStatus, userId, mode) {
+    async updateTaskStatus(id, userId, mode) {
 
-        const task = await TasksModel.findOne({where: {id: taskStatus.id}})
+        const task = await TasksModel.findOne({where: {id}})
 
         const isUserAdmin = await teamsService.isAdmin(userId, task.teamId)
         if (!isUserAdmin) {
@@ -82,10 +83,10 @@ class TodosService {
 
         switch (mode) {
             case 'start':
-                task.startedAt = taskStatus.startedAt
+                task.startedAt = Sequelize.literal('CURRENT_TIMESTAMP')
                 break
             case 'finish':
-                task.finishedAt = taskStatus.finishedAt
+                task.finishedAt = Sequelize.literal('CURRENT_TIMESTAMP')
                 break
             case 'reset':
                 task.startedAt = null
@@ -95,9 +96,10 @@ class TodosService {
                 break
         }
 
-        task.updatedBy = taskStatus.updatedBy
+        task.updatedBy = userId
 
-        return await task.save()
+        await task.save()
+        return await this.getOneTask(id, task.teamId, userId)
 
     }
 
