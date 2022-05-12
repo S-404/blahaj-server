@@ -6,6 +6,7 @@ require('dotenv').config()
 const authRouter = require('./routes/auth/auth-routes')
 const teamsRouter = require('./routes/teams/teams-routes')
 const tasksRouter = require('./routes/todos/tasks-routes')
+const tasksHrefsRouter = require('./routes/todos/hrefs-routes')
 
 const apiErrorMiddleware = require("./middlewares/error-middleware")
 const authMiddleware = require("./middlewares/auth-middleware")
@@ -20,9 +21,10 @@ app.use(cors({credentials: true, origin: process.env.CLIENT_URL}))
 app.use('/auth', authRouter)
 app.use(authMiddleware)
 
-
 app.use('/teams', teamsRouter)
+
 app.use('/todos', tasksRouter)
+app.use('/todos', tasksHrefsRouter)
 
 app.use(apiErrorMiddleware)
 app.listen(PORT, function () {
