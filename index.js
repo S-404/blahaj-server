@@ -5,7 +5,7 @@ require('dotenv').config()
 
 const authRouter = require('./routes/auth/auth-routes')
 const teamsRouter = require('./routes/teams/teams-routes')
-const todosRouter = require('./routes/todos/todos-routes')
+const tasksRouter = require('./routes/todos/tasks-routes')
 
 const apiErrorMiddleware = require("./middlewares/error-middleware")
 const authMiddleware = require("./middlewares/auth-middleware")
@@ -22,7 +22,7 @@ app.use(authMiddleware)
 
 
 app.use('/teams', teamsRouter)
-app.use('/todos', todosRouter)
+app.use('/todos', tasksRouter)
 
 app.use(apiErrorMiddleware)
 app.listen(PORT, function () {

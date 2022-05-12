@@ -4,7 +4,7 @@ const Sequelize = require('sequelize')
 const {TasksModel, TaskHrefsModel, TaskLogsModel} = require('../../sequelize/models')
 
 
-class TodosService {
+class TasksService {
 
     async createTask({newTask, userId}) {
 
@@ -121,4 +121,4 @@ class TodosService {
 
 }
 
-module.exports = new TodosService()
+module.exports = new TasksService()
