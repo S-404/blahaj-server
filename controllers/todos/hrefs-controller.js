@@ -4,11 +4,11 @@ class HrefsController {
 
     async createHref(req, res, next) {
         try {
-            const {teamId, taskId, href, isMain, shortName} = req.body
+            const {teamId, taskId, href, shortName} = req.body
             const {userId} = req.user
 
             const response = await hrefsService.createHref({
-                newHref: {teamId, taskId, href, isMain, shortName},
+                newHref: {teamId, taskId, href, shortName},
                 userId
             })
             return res.json(response)
@@ -20,10 +20,10 @@ class HrefsController {
 
     async updateHref(req, res, next) {
         try {
-            const {teamId, id, href, isMain, shortName} = req.body
+            const {teamId, id, href, shortName} = req.body
             const {userId} = req.user
             const response = await hrefsService.updateHref(
-                {teamId, id, href, isMain, shortName},
+                {teamId, id, href, shortName},
                 userId
             )
             return res.json(response)

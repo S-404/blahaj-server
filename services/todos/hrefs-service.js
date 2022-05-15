@@ -23,7 +23,6 @@ class HrefsService {
 
         const hrefObj = await TaskHrefsModel.findOne({where: {id: newHrefValues.id}})
         hrefObj.href = newHrefValues.href
-        hrefObj.isMain = newHrefValues.isMain
         hrefObj.shortName = newHrefValues.shortName
 
         return await hrefObj.save()
