@@ -1,6 +1,6 @@
-const todosService = require('../../services/todos/todos-service')
+const tasksService = require('../../services/todos/tasks-service')
 
-class TodosController {
+class TasksController {
 
     async createTask(req, res, next) {
         try {
@@ -13,7 +13,7 @@ class TodosController {
                 description,
             } = req.body
             const {userId} = req.user
-            const response = await todosService.createTask(
+            const response = await tasksService.createTask(
                 {
                     newTask:
                         {
@@ -37,7 +37,7 @@ class TodosController {
         try {
             const {teamId} = req.params
             const {userId} = req.user
-            const response = await todosService.getTasks(teamId, userId)
+            const response = await tasksService.getTasks(teamId, userId)
             return res.json(response)
         } catch (e) {
             next(e)
@@ -48,7 +48,7 @@ class TodosController {
         try {
             const {id, teamId} = req.params
             const {userId} = req.user
-            const response = await todosService.getOneTask(id, teamId, userId)
+            const response = await tasksService.getOneTask(id, teamId, userId)
             return res.json(response)
         } catch (e) {
             next(e)
@@ -69,7 +69,7 @@ class TodosController {
             } = req.body
             const {userId} = req.user
 
-            const response = await todosService.updateTaskInfo(
+            const response = await tasksService.updateTaskInfo(
                 {
                     id,
                     teamId,
@@ -92,7 +92,7 @@ class TodosController {
         try {
             const {mode,id} = req.params // mode: start/finish/reset
             const {userId} = req.user
-            const response = await todosService.updateTaskStatus(id,userId,mode)
+            const response = await tasksService.updateTaskStatus(id,userId,mode)
             return res.json(response)
         } catch (e) {
             next(e)
@@ -103,7 +103,7 @@ class TodosController {
         try {
             const {id} = req.params
             const {userId} = req.user
-            const response = await todosService.deleteTask(id, userId)
+            const response = await tasksService.deleteTask(id, userId)
             return res.json(response)
         } catch (e) {
             next(e)
@@ -112,4 +112,4 @@ class TodosController {
 
 }
 
-module.exports = new TodosController()
+module.exports = new TasksController()
