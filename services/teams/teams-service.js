@@ -8,7 +8,7 @@ class TeamsService {
         return !!team.isAdmin
     }
 
-    async isParticipant(userId,teamId){
+    async isParticipant(userId, teamId) {
         const participation = await ParticipantsModel.count({where: {teamId, userId}})
         return participation !== 0
     }
@@ -97,11 +97,10 @@ class TeamsService {
                 include: {
                     model: ParticipantsModel,
                     required: false,
-                    attributes: ['id', 'isAdmin'],
                     include: {
                         model: UsersModel,
                         required: false,
-                        attributes: ['username'],
+                        attributes: ['username', 'job'],
                     }
                 },
             },
