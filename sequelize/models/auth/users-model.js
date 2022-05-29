@@ -24,6 +24,9 @@ module.exports = function (sequelize) {
         isActivated: {
             type: Sequelize.BOOLEAN
         },
+        job:{
+            type: Sequelize.STRING
+        }
     }, {
         timestamps: false
     })
